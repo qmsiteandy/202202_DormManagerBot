@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "bottender dev",
     "lint": "eslint . ",
-    "start": "bottender start",
-    "test": "jest"
+    "start": "node server.js"
   },
   "dependencies": {
-    "bottender": "1.5.5"
+    "bottender": "1.5.5",
+    "express": "^4.17.3"
   },
   "devDependencies": {
     "eslint": "^8.9.0",
