@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "bottender": "1.5.5",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "express-async-handler": "^1.2.0"
   },
   "devDependencies": {
     "eslint": "^8.9.0",

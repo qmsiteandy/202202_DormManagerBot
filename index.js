@@ -4,7 +4,7 @@ module.exports = async function App(context) {
     await context.sendText('Welcome to Bottender');
     
     //取得template
-    let flexMessage = (require('./template/bubbleTemplate.json'));
+    let flexMessage = require('./template/bubbleTemplate.json');
     //修改template內容
     flexMessage['footer']['contents'][0]['action']['label'] = '123';
   
