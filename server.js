@@ -1,43 +1,26 @@
-// 此程式負責API Server
-
+require('dotenv').config();
+const { LineClient } = require('messaging-api-line');
 const bodyParser = require('body-parser');
 const express = require('express');
-const { bottender } = require('bottender');
-const path = require('path');
 
-const app = bottender({
-  dev: process.env.NODE_ENV !== 'production',
+//載入 API Routers
+const userRouter = require("./routers/userRouter");
+
+//建立 Server
+const server = express();
+server.use(bodyParser.json());
+
+// get accessToken and channelSecret from LINE developers website
+const client = new LineClient({
+  accessToken: process.env.LINE_ACCESS_TOKEN,
+  channelSecret: process.env.LINE_CHANNEL_SECRET,
 });
 
+//設定 API Router 路徑
+server.use("/", userRouter);
+
+//Server 監聽 PORT 設定
 const port = Number(process.env.PORT) || 5000;
-
-// the request handler of the bottender app
-const handle = app.getRequestHandler();
-
-app.prepare().then(() => {
-  const server = express();
-
-  server.use(
-    bodyParser.json({
-      verify: (req, _, buf) => {
-        req.rawBody = buf.toString();
-      },
-    })
-  );
-
-  // your custom route
-  server.get('/', (req, res) => {
-    res.send('Hello World!');
-  });
-
-
-  // route for webhook request
-  server.all('*', (req, res) => {
-    return handle(req, res);
-  });
-
-  server.listen(port, err => {
-    if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
-  });
+server.listen(port, () => {
+  console.log(`Server is running on localhost:${port}`);
 });
