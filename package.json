@@ -8,9 +8,11 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-async-handler": "^1.2.0",
-    "messaging-api-line": "^1.1.0"
+    "messaging-api-line": "^1.1.0",
+    "mongoose": "^6.2.4"
   },
   "devDependencies": {
     "eslint": "^8.9.0",
