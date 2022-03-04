@@ -9,9 +9,9 @@ const client = new LineClient({
     channelSecret: process.env.LINE_CHANNEL_SECRET,
   });
 
-const userRouter = express.Router();
+const lineClientRouter = express.Router();
 
-userRouter.post(
+lineClientRouter.post(
     "/",
     expressAsyncHandler(async (req, res) => {
         //取得Request內容
@@ -30,4 +30,4 @@ userRouter.post(
     })
   );
 
-  module.exports = userRouter;
+  module.exports = lineClientRouter;
