@@ -23,7 +23,9 @@ lineClientRouter.post(
         const newStudent = new Student({
           name: "ABC",
           userID: "110011",
-          roomID: "1234",
+          dormID: "1",
+          floorID: "2",
+          roomID: "34",
           lineUID: source.userId
         });
         const createdStudent = await newStudent.save();
