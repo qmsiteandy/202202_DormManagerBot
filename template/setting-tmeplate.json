@@ -1,0 +1,102 @@
+{
+    "type": "bubble",
+    "header": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "設定",
+          "margin": "none",
+          "color": "#ffffff",
+          "weight": "bold",
+          "style": "normal",
+          "align": "start",
+          "size": "lg",
+          "contents": []
+        }
+      ],
+      "backgroundColor": "#37718E",
+      "borderWidth": "none",
+      "cornerRadius": "none",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "borderColor": "#ffffff"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "[STATUS]",
+          "align": "center",
+          "wrap": true
+        },
+        {
+          "type": "separator",
+          "margin": "lg"
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
+            {
+              "type": "filler"
+            },
+            {
+              "type": "button",
+              "action": {
+                "type": "message",
+                "label": "連結系統",
+                "text": "連結設定"
+              },
+              "style": "primary",
+              "color": "#1D495C",
+              "margin": "none",
+              "flex": 2,
+              "height": "sm",
+              "offsetTop": "none"
+            },
+            {
+              "type": "filler"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
+            {
+              "type": "filler",
+              "flex": 1
+            },
+            {
+              "type": "button",
+              "action": {
+                "type": "postback",
+                "label": "斷開連結",
+                "data": "hello"
+              },
+              "margin": "none",
+              "flex": 5,
+              "height": "sm",
+              "offsetTop": "none"
+            },
+            {
+              "type": "filler",
+              "flex": 1
+            }
+          ]
+        } 
+      ],
+      "justifyContent": "center",
+      "alignItems": "center"
+    }
+  }
