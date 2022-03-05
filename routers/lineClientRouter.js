@@ -2,9 +2,13 @@ require('dotenv').config();
 const { LineClient } = require('messaging-api-line');
 const express = require('express');
 const expressAsyncHandler = require("express-async-handler");
+const fs = require('fs');
 
 const lineClientRouter = express.Router();
 const Student = require('../models/studentModel');
+
+const connect_input_template = require('../template/connect-input-template.json');
+const setting_tmeplate = require('../template/setting-tmeplate.json');
 
 // get accessToken and channelSecret from LINE developers website
 const client = new LineClient({
@@ -25,8 +29,8 @@ lineClientRouter.post(
 //#region -----連結設定-----
         if(message.text == '連結設定'){
         
-          //取得template
-          let flexMessage = (require('../template/connect-input-template.json'));
+          //取得template，以Json方式值轉換方式，可避免指向相同的記憶體位置
+          let flexMessage = JSON.parse(JSON.stringify(setting_tmeplate));
           //傳送資料到特定id使用者
           await client.pushFlex(source.userId, '[connect-input-template]', flexMessage);
 
@@ -107,9 +111,8 @@ lineClientRouter.post(
 //#region -----設定-----
         if(message.text == '設定'){
 
-          //取得template
-          let flexMessage = require('../template/setting-tmeplate.json');
-          console.log(flexMessage['footer']['contents']);
+          //取得template，以Json方式值轉換方式，可避免指向相同的記憶體位置
+          let flexMessage = JSON.parse(JSON.stringify(setting_tmeplate));
 
           //搜尋此帳號是否已經連結
           const existStudent = await Student.findOne({lineUID: source.userId});
@@ -139,12 +142,16 @@ lineClientRouter.post(
           //傳送資料到特定id使用者
           await client.pushFlex(source.userId, '[setting-tmeplate]', flexMessage);
         }
+
+        if(message.text == 'test') {
+          await client.pushFlex(source.userId, '[setting-tmeplate]', setting_tmeplate);
+        }
 //#endregion -----設定-----
       }
-      
+
 
       //-----回傳指令類型-----
-      else if(type == 'postback'){
+      if(type == 'postback'){
         // let data = querystring.parse(event.postback.data);
         // if (data.action === 'url' && data.item === 'clarence') {
         //   return client.replyMessage(event.replyToken, {
