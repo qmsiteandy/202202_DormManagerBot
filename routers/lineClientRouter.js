@@ -30,9 +30,9 @@ lineClientRouter.post(
         if(message.text == '連結設定'){
         
           //取得template，以Json方式值轉換方式，可避免指向相同的記憶體位置
-          let flexMessage = JSON.parse(JSON.stringify(setting_tmeplate));
+          let flexMessage = JSON.parse(JSON.stringify(connect_input_template));
           //傳送資料到特定id使用者
-          await client.pushFlex(source.userId, '[connect-input-template]', flexMessage);
+          await client.pushFlex(source.userId, '[connect_input_template]', flexMessage);
 
           //Wait for seconds
           await new Promise(resolve => setTimeout(resolve, 500));
@@ -43,7 +43,7 @@ lineClientRouter.post(
 
 //#region -----輸入初始資料-----
         //以正規式檢查資料傳入的是正確格式
-        let rule = /姓名\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+學號\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+第幾宿舍\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+樓層\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+幾房\:/;
+        const rule = /姓名\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+學號\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+第幾宿舍\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+樓層\:[\u4e00-\u9fa5_a-zA-Z0-9\s]+幾房\:/;
         if(rule.test(message.text)){
 
           //搜尋此帳號是否已經連結
@@ -100,7 +100,7 @@ lineClientRouter.post(
           const createdStudent = await newStudent.save();
           
           //傳送成功資訊
-          await client.pushText(source.userId, '建立成功');
+          await client.pushText(source.userId, '連結成功');
 
           //結束
           res.sendStatus(200);
@@ -140,18 +140,18 @@ lineClientRouter.post(
           }
 
           //傳送資料到特定id使用者
-          await client.pushFlex(source.userId, '[setting-tmeplate]', flexMessage);
+          await client.pushFlex(source.userId, '[setting_tmeplate]', flexMessage);
         }
 
         if(message.text == 'test') {
-          await client.pushFlex(source.userId, '[setting-tmeplate]', setting_tmeplate);
+          await client.pushFlex(source.userId, '[setting_tmeplate]', require('../template/bubble-template.json'));
         }
 //#endregion -----設定-----
       }
 
 
       //-----回傳指令類型-----
-      if(type == 'postback'){
+      else if(type == 'postback'){
         // let data = querystring.parse(event.postback.data);
         // if (data.action === 'url' && data.item === 'clarence') {
         //   return client.replyMessage(event.replyToken, {
