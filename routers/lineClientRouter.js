@@ -17,13 +17,13 @@ lineClientRouter.post(
     "/",
     expressAsyncHandler(async (req, res) => {
       //取得Request內容
-      const { type, message, source, replyToken } = req.body.events[0];
+      const { type, message, postback, source, replyToken } = req.body.events[0];
       
       //-----訊息分類-----
-      if(type == "message"){
+      if(type == 'message'){
 
 //#region -----連結設定-----
-        if(message.text == "連結設定"){
+        if(message.text == '連結設定'){
         
           //取得template
           let flexMessage = (require('../template/connect-input-template.json'));
@@ -31,7 +31,7 @@ lineClientRouter.post(
           await client.pushFlex(source.userId, '[connect-input-template]', flexMessage);
 
           //Wait for seconds
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise(resolve => setTimeout(resolve, 500));
 
           await client.pushText(source.userId, '姓名:\n學號:\n第幾宿舍:\n樓層:\n幾房:')
         }
@@ -105,17 +105,18 @@ lineClientRouter.post(
 //#endregion -----輸入初始資料-----
 
 //#region -----設定-----
-        if(message.text == "設定"){
+        if(message.text == '設定'){
 
           //取得template
-          let flexMessage = (require('../template/setting-tmeplate.json'));
+          let flexMessage = require('../template/setting-tmeplate.json');
+          console.log(flexMessage['footer']['contents']);
 
           //搜尋此帳號是否已經連結
           const existStudent = await Student.findOne({lineUID: source.userId});
           //已經連結
           if(existStudent){
 
-            flexMessage['body']['contents'][0]['text'] = "此帳號已經連結下方資訊\n\n" + JSON.stringify({
+            flexMessage['body']['contents'][0]['text'] = '此帳號已經連結下方資訊\n\n' + JSON.stringify({
               '姓名':existStudent.name,
               '學號':existStudent.userID,
               '宿舍':existStudent.dormID,
@@ -123,14 +124,13 @@ lineClientRouter.post(
               '房號':existStudent.roomID
             }) + '\n\n如需修改資訊\n斷開連結後\n輸入"設定"再次連結';
 
-            console.log(flexMessage['body']['contents'][0]['text']);
             //刪除用不到的按鈕
             flexMessage['footer']['contents'].splice(0, 1);
           }
           //尚未連接
           else{
 
-            flexMessage['body']['contents'][0]['text'] = "此帳號尚未連接"
+            flexMessage['body']['contents'][0]['text'] = '此帳號尚未連接';
 
             //刪除用不到的按鈕
             flexMessage['footer']['contents'].splice(1, 1);
@@ -144,19 +144,30 @@ lineClientRouter.post(
       
 
       //-----回傳指令類型-----
-      // else if(type == "postback"){
-      //   // let data = querystring.parse(event.postback.data);
-      //   // if (data.action === 'url' && data.item === 'clarence') {
-      //   //   return client.replyMessage(event.replyToken, {
-      //   //     type: 'text',
-      //   //     text: 'https://ithelp.ithome.com.tw/users/20117701/ironman/2634'
-      //   //   });
-      //   // }
-      // }
+      else if(type == 'postback'){
+        // let data = querystring.parse(event.postback.data);
+        // if (data.action === 'url' && data.item === 'clarence') {
+        //   return client.replyMessage(event.replyToken, {
+        //     type: 'text',
+        //     text: 'https://ithelp.ithome.com.tw/users/20117701/ironman/2634'
+        //   });
+
+//#region -----中斷連結-----
+        if(postback.data == 'disconnect'){
+
+          //搜尋此帳號資料並刪除
+          await Student.findOneAndDelete({lineUID: source.userId});
+
+          //傳送成功資訊
+          await client.pushText(source.userId, '已中斷連結');
+        }
+//#endregion -----中斷連結-----   
+
+      }
 
       //-----預料外的內容，開發監測-----
       else{
-        console.log(req.body.events);
+        console.log(req.body.events[0]);
       }
 
       //回傳

@@ -81,8 +81,8 @@
               "type": "button",
               "action": {
                 "type": "postback",
-                "label": "斷開連結",
-                "data": "hello"
+                "label": "中斷連結",
+                "data": "disconnect"
               },
               "margin": "none",
               "flex": 5,
